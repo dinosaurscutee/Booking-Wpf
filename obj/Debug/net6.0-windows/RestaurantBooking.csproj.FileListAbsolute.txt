@@ -61,3 +61,4 @@ D:\apigg\RestaurantBooking\RestaurantBooking\obj\Debug\net6.0-windows\refint\Res
 D:\apigg\RestaurantBooking\RestaurantBooking\obj\Debug\net6.0-windows\RestaurantBooking.pdb
 D:\apigg\RestaurantBooking\RestaurantBooking\obj\Debug\net6.0-windows\RestaurantBooking.genruntimeconfig.cache
 D:\apigg\RestaurantBooking\RestaurantBooking\obj\Debug\net6.0-windows\ref\RestaurantBooking.dll
+D:\apigg\RestaurantBooking\RestaurantBooking\bin\Debug\net6.0-windows\appsettings.json

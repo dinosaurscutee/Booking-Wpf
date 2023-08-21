@@ -5,8 +5,51 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RestaurantBooking"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="650" Width="1000">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
+        <StackPanel Grid.Column="1" Grid.Row="0">
+            <Label Content="Restaurant Booking" HorizontalAlignment="Center" FontSize="30" FontWeight="Bold"/>
+        </StackPanel>
+
+     
+        <StackPanel Grid.Column="2" Grid.Row="0" Grid.RowSpan="3">
+            
+            <Label Content="Chọn món ăn" FontSize="20" HorizontalAlignment="Center" Margin="0,20,0,10" />
+            <ListView Name="foodListView" Height="150" Width="330">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Món ăn" DisplayMemberBinding="{Binding ItemName}"/>
+                        <GridViewColumn Header="Số lượng" Width="60">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Name="quantityTextBox" Width="40" Text="{Binding Quantity}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Header="Giá" DisplayMemberBinding="{Binding ItemPrice}" />
+                        <GridViewColumn Header="Chọn" Width="60">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox Name="foodCheckBox" IsChecked="{Binding IsSelected}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <Button Content="Chọn món" Width="100" HorizontalAlignment="Center" Click="SelectFood_Click" />
+        </StackPanel>
     </Grid>
 </Window>

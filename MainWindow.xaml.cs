@@ -1,28 +1,110 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Microsoft.EntityFrameworkCore;
+using RestaurantBooking.Models;
 
 namespace RestaurantBooking
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly RestaurantBookingContext _context;
+        private List<MenuItem> menuItemsList;
+
         public MainWindow()
         {
             InitializeComponent();
+            _context = new RestaurantBookingContext();
+
+            LoadMenuItems();
         }
+
+
+            //load menu tu db
+        private void LoadMenuItems()
+        {
+
+            menuItemsList = _context.MenuItems.ToList();
+
+           
+            foreach (var menuItem in menuItemsList)
+            {
+                menuItem.Quantity = 0;
+            }
+
+            foodListView.ItemsSource = menuItemsList;
+        }
+
+        //add food vào bảng order
+        private void SelectFood_Click(object sender, RoutedEventArgs e)
+        {
+            List<MenuItem> selectedItems = menuItemsList.Where(item => item.IsSelected).ToList();
+
+            if (selectedItems.Count == 0)
+            {
+                MessageBox.Show("Vui lòng chọn ít nhất một món ăn.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            bool hasZeroQuantity = selectedItems.Any(item => item.Quantity == 0);
+            if (hasZeroQuantity)
+            {
+                MessageBox.Show("Vui lòng nhập số lượng lớn hơn 0 cho các món ăn đã chọn.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    // Tạo bản ghi Order mới
+                    Order newOrder = new Order
+                    {
+                        OrderTime = DateTime.Now,
+                        Status = "Pending",
+                        PaymentStatus = "Unpaid",
+                        TotalAmount = selectedItems.Sum(item => item.ItemPrice * item.Quantity)
+                    };
+                    _context.Orders.Add(newOrder);
+                    _context.SaveChanges();
+
+                    // Lấy OrderId mới
+                    int newOrderId = newOrder.OrderId;
+
+                    // Thêm các món ăn đã chọn vào bảng OrderItem
+                    foreach (var selectedItem in selectedItems)
+                    {
+                        decimal itemPrice = selectedItem.ItemPrice ?? 0;
+                        int quantity = selectedItem.Quantity ?? 1;
+
+                        if (quantity > 0)
+                        {
+                            OrderItem newOrderItem = new OrderItem
+                            {
+                                OrderId = newOrderId,
+                                MenuItemId = selectedItem.MenuItemId,
+                                ItemPrice = itemPrice,
+                                Quantity = quantity
+                            };
+                            _context.OrderItems.Add(newOrderItem);
+                        }
+                    }
+
+                    _context.SaveChanges();
+                    transaction.Commit();
+
+                    MessageBox.Show("Đã thêm các món vào đơn hàng.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+
+
     }
 }
