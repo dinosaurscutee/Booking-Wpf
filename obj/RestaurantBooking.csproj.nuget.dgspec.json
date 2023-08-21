@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\apigg\\RestaurantBooking\\RestaurantBooking\\RestaurantBooking.csproj": {}
+    "C:\\Users\\Dorae\\Desktop\\PRN221_Project\\PRN221-Team-3-Project\\RestaurantBooking.csproj": {}
   },
   "projects": {
-    "D:\\apigg\\RestaurantBooking\\RestaurantBooking\\RestaurantBooking.csproj": {
+    "C:\\Users\\Dorae\\Desktop\\PRN221_Project\\PRN221-Team-3-Project\\RestaurantBooking.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\apigg\\RestaurantBooking\\RestaurantBooking\\RestaurantBooking.csproj",
+        "projectUniqueName": "C:\\Users\\Dorae\\Desktop\\PRN221_Project\\PRN221-Team-3-Project\\RestaurantBooking.csproj",
         "projectName": "RestaurantBooking",
-        "projectPath": "D:\\apigg\\RestaurantBooking\\RestaurantBooking\\RestaurantBooking.csproj",
-        "packagesPath": "C:\\Users\\quang\\.nuget\\packages\\",
-        "outputPath": "D:\\apigg\\RestaurantBooking\\RestaurantBooking\\obj\\",
+        "projectPath": "C:\\Users\\Dorae\\Desktop\\PRN221_Project\\PRN221-Team-3-Project\\RestaurantBooking.csproj",
+        "packagesPath": "C:\\Users\\Dorae\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Dorae\\Desktop\\PRN221_Project\\PRN221-Team-3-Project\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\quang\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\Dorae\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

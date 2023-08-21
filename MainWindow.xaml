@@ -5,8 +5,45 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RestaurantBooking"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
+        Height="450" Width="800">
+    <Grid Margin="10,0,0,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Content="Login" FontWeight="Bold" FontSize="20" Grid.Column="0" Grid.Row="0"/>
+        <Label Content="Register" FontWeight="Bold" FontSize="20" Grid.Column="1" Grid.Row="0"/>
+        <StackPanel Grid.Row="1"  Orientation="Horizontal">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Username" FontWeight="Bold" FontSize="20" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBox Name="txtUsername" Grid.Column="1" Width="250" Height="50"/>
+            </Grid>
+        </StackPanel>
+        <StackPanel Grid.Row="2"  Orientation="Horizontal">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Password" FontWeight="Bold" FontSize="20" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBox Name="txtPassword" Grid.Column="1" Width="250" Height="50"/>
+            </Grid>
+        </StackPanel>
+        <StackPanel Grid.Row="3"  Orientation="Horizontal">
+            <Grid Width="395">
+                <Button Content="Login" Width="125" Height="50" x:Name="btnlogin" Margin="154,18,116,19"/>
+            </Grid>
+        </StackPanel>
     </Grid>
 </Window>
