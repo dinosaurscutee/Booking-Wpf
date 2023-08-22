@@ -99,21 +99,7 @@ namespace TableManage
             }
         }
 
-        public class RadioButtonFloorConverter : IValueConverter
-        {
-            public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-            {
-                int floorValue = System.Convert.ToInt32(parameter);
-                int selectedFloor = (int)value;
-
-                return floorValue == selectedFloor;
-            }
-
-            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-            {
-                throw new NotImplementedException();
-            }
-        }
+       
 
     }
 }

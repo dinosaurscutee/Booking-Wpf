@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "D:\\New folder\\PRN221-Team-3-Project\\RestaurantBooking.csproj": {}
+    "D:\\apigg\\RestaurantBooking\\RestaurantBooking\\RestaurantBooking.csproj": {}
   },
   "projects": {
-    "D:\\New folder\\PRN221-Team-3-Project\\RestaurantBooking.csproj": {
+    "D:\\apigg\\RestaurantBooking\\RestaurantBooking\\RestaurantBooking.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\New folder\\PRN221-Team-3-Project\\RestaurantBooking.csproj",
+        "projectUniqueName": "D:\\apigg\\RestaurantBooking\\RestaurantBooking\\RestaurantBooking.csproj",
         "projectName": "RestaurantBooking",
-        "projectPath": "D:\\New folder\\PRN221-Team-3-Project\\RestaurantBooking.csproj",
-        "packagesPath": "C:\\Users\\hieud\\.nuget\\packages\\",
-        "outputPath": "D:\\New folder\\PRN221-Team-3-Project\\obj\\",
+        "projectPath": "D:\\apigg\\RestaurantBooking\\RestaurantBooking\\RestaurantBooking.csproj",
+        "packagesPath": "C:\\Users\\quang\\.nuget\\packages\\",
+        "outputPath": "D:\\apigg\\RestaurantBooking\\RestaurantBooking\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\hieud\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\quang\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -74,7 +78,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.304\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
         }
       }
     }
