@@ -2,21 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using Microsoft.EntityFrameworkCore;
 using RestaurantBooking.Models;
+using TableManage;
 
 namespace RestaurantBooking
 {
     public partial class MainWindow : Window
     {
         private readonly RestaurantBookingContext _context;
-        private List<MenuItem> menuItemsList;
+        private List<Models.MenuItem> menuItemsList;
+
+        private ViewModel viewModel;
 
         public MainWindow()
         {
             InitializeComponent();
             _context = new RestaurantBookingContext();
-
+            viewModel = new ViewModel(_context);
+            DataContext = viewModel;
             LoadMenuItems();
         }
 
@@ -39,7 +44,7 @@ namespace RestaurantBooking
         //add food vào bảng order
         private void SelectFood_Click(object sender, RoutedEventArgs e)
         {
-            List<MenuItem> selectedItems = menuItemsList.Where(item => item.IsSelected).ToList();
+            List<Models.MenuItem> selectedItems = menuItemsList.Where(item => item.IsSelected).ToList();
 
             if (selectedItems.Count == 0)
             {
@@ -104,7 +109,83 @@ namespace RestaurantBooking
             }
         }
 
+        private void SetTableButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (viewModel.SelectedTable != null)
+            {
+                if (viewModel.SelectedTable.TableStatus == "Available")
+                {
+                    string inputCode = PromptForInput("Nhập mã bàn:");
 
+                    if (inputCode == viewModel.SelectedTable.TableCode)
+                    {
+                        viewModel.UpdateTableStatus(viewModel.SelectedTable, "Occupied");
+                        MessageBox.Show("Bàn đã được đặt thành công.");
+                        RefreshTableDataContext();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Mã bàn không đúng.");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Bàn đã có người đặt.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn một bàn trước.");
+            }
+        }
+
+        private void CancelTableButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (viewModel.SelectedTable != null)
+            {
+                if (viewModel.SelectedTable.TableStatus == "Occupied")
+                {
+                    viewModel.UpdateTableStatus(viewModel.SelectedTable, "Available");
+                    MessageBox.Show("Hủy đặt bàn thành công.");
+                    RefreshTableDataContext();
+                }
+                else
+                {
+                    MessageBox.Show("Bàn không thể hủy đặt.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn một bàn trước.");
+            }
+        }
+        private string PromptForInput(string prompt)
+        {
+            InputDialog inputDialog = new InputDialog(prompt);
+            if (inputDialog.ShowDialog() == true)
+            {
+                return inputDialog.InputValue;
+            }
+            return null;
+        }
+        private void RefreshTableDataContext()
+        {
+            ListBoxTables.DataContext = null;
+            ListBoxTables.DataContext = viewModel;
+        }
+
+        private void TableTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            viewModel.RefreshTables();
+            RefreshTableDataContext();
+
+        }
+
+        private void FloorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            viewModel.RefreshTables();
+            RefreshTableDataContext();
+        }
 
     }
 }
