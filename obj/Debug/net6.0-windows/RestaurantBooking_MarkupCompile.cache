@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-D:\apigg\RestaurantBooking\RestaurantBooking\obj\Debug\net6.0-windows\
+C:\Users\Dorae\Desktop\PRN221_Project\PRN221-Team-3-Project\obj\Debug\net6.0-windows\
 RestaurantBooking
 none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
-D:\apigg\RestaurantBooking\RestaurantBooking\App.xaml
-11407045341
+C:\Users\Dorae\Desktop\PRN221_Project\PRN221-Team-3-Project\App.xaml
+21979451877
 
-9-1955334594
-220-1880201500
-MainWindow.xaml;
+11355892068
+2201330147907
+Login.xaml;UserRegister.xaml;
 
 False
 

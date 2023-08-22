@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Configuration;
 
 namespace RestaurantBooking.Models
 {
@@ -18,27 +16,27 @@ namespace RestaurantBooking.Models
         {
         }
 
-        public virtual DbSet<MenuItem> MenuItems { get; set; } = null!;
-        public virtual DbSet<Order> Orders { get; set; } = null!;
-        public virtual DbSet<Payment> Payments { get; set; } = null!;
-        public virtual DbSet<Table> Tables { get; set; } = null!;
-        public virtual DbSet<User> Users { get; set; } = null!;
+        public virtual DbSet<MenuItem> MenuItems { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<OrderItem> OrderItems { get; set; }
+        public virtual DbSet<Payment> Payments { get; set; }
+        public virtual DbSet<Table> Tables { get; set; }
+        public virtual DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-            IConfiguration configuration = builder.Build();
-            optionsBuilder.UseSqlServer(configuration.GetConnectionString("MyCnn"));
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("server=THANHQUANG\\MSSQL;database=RestaurantBooking;uid=sa;pwd=12345678;");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MenuItem>(entity =>
             {
-                entity.Property(e => e.MenuItemId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("MenuItemID");
+                entity.Property(e => e.MenuItemId).HasColumnName("MenuItemID");
 
                 entity.Property(e => e.ItemName).HasMaxLength(100);
 
@@ -47,9 +45,7 @@ namespace RestaurantBooking.Models
 
             modelBuilder.Entity<Order>(entity =>
             {
-                entity.Property(e => e.OrderId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("OrderID");
+                entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
                 entity.Property(e => e.OrderTime).HasColumnType("datetime");
 
@@ -59,24 +55,40 @@ namespace RestaurantBooking.Models
 
                 entity.Property(e => e.TableId).HasColumnName("TableID");
 
-                entity.Property(e => e.UserId).HasColumnName("UserID");
+                entity.Property(e => e.TotalAmount).HasColumnType("decimal(10, 2)");
 
                 entity.HasOne(d => d.Table)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.TableId)
-                    .HasConstraintName("FK__Orders__TableID__2B3F6F97");
+                    .HasConstraintName("FK_Orders_Tables");
+            });
 
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__Orders__UserID__2C3393D0");
+            modelBuilder.Entity<OrderItem>(entity =>
+            {
+                entity.Property(e => e.OrderItemId).HasColumnName("OrderItemID");
+
+                entity.Property(e => e.ItemPrice).HasColumnType("decimal(10, 2)");
+
+                entity.Property(e => e.MenuItemId).HasColumnName("MenuItemID");
+
+                entity.Property(e => e.OrderId).HasColumnName("OrderID");
+
+                entity.HasOne(d => d.MenuItem)
+                    .WithMany(p => p.OrderItems)
+                    .HasForeignKey(d => d.MenuItemId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OrderItems_MenuItems");
+
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.OrderItems)
+                    .HasForeignKey(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OrderItems_Orders");
             });
 
             modelBuilder.Entity<Payment>(entity =>
             {
-                entity.Property(e => e.PaymentId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("PaymentID");
+                entity.Property(e => e.PaymentId).HasColumnName("PaymentID");
 
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
@@ -89,14 +101,12 @@ namespace RestaurantBooking.Models
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.Payments)
                     .HasForeignKey(d => d.OrderId)
-                    .HasConstraintName("FK__Payments__OrderI__2F10007B");
+                    .HasConstraintName("FK_Payments_Orders");
             });
 
             modelBuilder.Entity<Table>(entity =>
             {
-                entity.Property(e => e.TableId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("TableID");
+                entity.Property(e => e.TableId).HasColumnName("TableID");
 
                 entity.Property(e => e.TableName).HasMaxLength(50);
 
@@ -107,9 +117,7 @@ namespace RestaurantBooking.Models
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.Property(e => e.UserId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("UserID");
+                entity.Property(e => e.UserId).HasColumnName("UserID");
 
                 entity.Property(e => e.FullName).HasMaxLength(100);
 
