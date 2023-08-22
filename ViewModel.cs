@@ -40,7 +40,7 @@ namespace TableManage
             }
 
             // Áp dụng bộ lọc cho Floors (nếu có lựa chọn)
-            if (SelectedFloor != 0 && SelectedFloor != -1) // Giả sử 0 là tùy chọn "Tất cả tầng"
+            if (!string.IsNullOrEmpty(SelectedFloor) && SelectedFloor != "Tất cả")
             {
                 filtered = filtered.Where(table => table.Floors.Equals(SelectedFloor));
             }
@@ -88,8 +88,8 @@ namespace TableManage
             }
         }
 
-        private int _selectedFloor;
-        public int SelectedFloor
+        private string _selectedFloor;
+        public string SelectedFloor
         {
             get { return _selectedFloor; }
             set
