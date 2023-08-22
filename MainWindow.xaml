@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RestaurantBooking"
         mc:Ignorable="d"
-        Title="MainWindow" Height="650" Width="1000">
+        Title="MainWindow" Height="800" Width="1200">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
@@ -17,6 +17,49 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+
+        <StackPanel Grid.Column="0" Grid.Row="0">
+            <ComboBox Name="TableTypeComboBox" ItemsSource="{Binding TableTypes}" SelectedItem="{Binding SelectedTableType}" Margin="10" SelectionChanged="TableTypeComboBox_SelectionChanged"/>
+            <ComboBox Name="FloorComboBox" ItemsSource="{Binding Floors}" SelectedItem="{Binding SelectedFloor}" Margin="10,5" SelectionChanged="FloorComboBox_SelectionChanged"/>
+
+            <ListBox Name="ListBoxTables" ItemsSource="{Binding Tables}" SelectedItem="{Binding SelectedTable}" SelectionMode="Single" Margin="0,0,10,250">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="Black" BorderThickness="1" Width="50" Height="50" Margin="5">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="White"/>
+                                    <!-- Màu mặc định -->
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding TableStatus}" Value="Occupied">
+                                            <Setter Property="Background" Value="Green"/>
+                                            <!-- Thay đổi màu khi bàn đã đặt thành công -->
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <StackPanel>
+                                <TextBlock Text="{Binding TableName}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding TableStatus}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel IsItemsHost="True" Orientation="Horizontal" MaxWidth="600"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+
+
+            <Button Content="Đặt bàn" Click="SetTableButton_Click" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,5" Height="38" Width="100"/>
+            <Button Content="Hủy đặt bàn" Click="CancelTableButton_Click" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,5" Height="38" Width="112"/>
+        </StackPanel>
+
+
+
+
 
         <StackPanel Grid.Column="1" Grid.Row="0">
             <Label Content="Restaurant Booking" HorizontalAlignment="Center" FontSize="30" FontWeight="Bold"/>

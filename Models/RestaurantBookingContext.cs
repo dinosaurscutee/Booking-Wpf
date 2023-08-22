@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Configuration;
 
 namespace RestaurantBooking.Models
 {
@@ -22,15 +20,16 @@ namespace RestaurantBooking.Models
         public virtual DbSet<Order> Orders { get; set; } = null!;
         public virtual DbSet<OrderItem> OrderItems { get; set; } = null!;
         public virtual DbSet<Payment> Payments { get; set; } = null!;
-        public virtual DbSet<Table> Tables { get; set; } = null!;
+        public virtual DbSet<Tabless> Tablesses { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
-               .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-            IConfiguration configuration = builder.Build();
-            optionsBuilder.UseSqlServer(configuration.GetConnectionString("MyCnn"));
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Data Source=CITIH\\SQLEXPRESS;Initial Catalog=RestaurantBooking;User ID=sa;Password=123456;");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -105,9 +104,21 @@ namespace RestaurantBooking.Models
                     .HasConstraintName("FK_Payments_Orders");
             });
 
-            modelBuilder.Entity<Table>(entity =>
+            modelBuilder.Entity<Tabless>(entity =>
             {
+                entity.HasKey(e => e.TableId)
+                    .HasName("PK__Tabless__7D5F018EC73AF0EE");
+
+                entity.ToTable("Tabless");
+
+                entity.HasIndex(e => e.TableCode, "UQ__Tabless__896A43236E6DDA39")
+                    .IsUnique();
+
                 entity.Property(e => e.TableId).HasColumnName("TableID");
+
+                entity.Property(e => e.Floors).HasMaxLength(50);
+
+                entity.Property(e => e.TableCode).HasMaxLength(10);
 
                 entity.Property(e => e.TableName).HasMaxLength(50);
 

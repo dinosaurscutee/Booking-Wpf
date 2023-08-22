@@ -18,7 +18,7 @@ namespace RestaurantBooking.Models
         public string? PaymentStatus { get; set; }
         public decimal? TotalAmount { get; set; }
 
-        public virtual Table? Table { get; set; }
+        public virtual Tabless? Table { get; set; }
         public virtual ICollection<OrderItem> OrderItems { get; set; }
         public virtual ICollection<Payment> Payments { get; set; }
     }
