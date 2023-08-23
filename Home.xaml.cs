@@ -9,14 +9,14 @@ using TableManage;
 
 namespace RestaurantBooking
 {
-    public partial class MainWindow : Window
+    public partial class Home : Window
     {
         private readonly RestaurantBookingContext _context;
         private List<Models.MenuItem> menuItemsList;
 
         private ViewModel viewModel;
 
-        public MainWindow()
+        public Home()
         {
             InitializeComponent();
             _context = new RestaurantBookingContext();
