@@ -27,6 +27,18 @@ namespace TableManage
             InitializeComponent();
             Prompt = prompt;
             DataContext = this;
+            Owner = Application.Current.MainWindow;
+
+            // Định vị cửa sổ InputDialog ở giữa cửa sổ chính
+            WindowStartupLocation = WindowStartupLocation.CenterOwner;
+        }
+
+        private void InputTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                OKButton_Click(sender, e);
+            }
         }
 
         private void OKButton_Click(object sender, RoutedEventArgs e)

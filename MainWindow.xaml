@@ -19,6 +19,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Column="0" Grid.Row="0">
+            <Label Content="Chọn Bàn" FontSize="20" HorizontalAlignment="Center" Margin="0,20,0,10" />
             <ComboBox Name="TableTypeComboBox" ItemsSource="{Binding TableTypes}" SelectedItem="{Binding SelectedTableType}" Margin="10" SelectionChanged="TableTypeComboBox_SelectionChanged"/>
             <ComboBox Name="FloorComboBox" ItemsSource="{Binding Floors}" SelectedItem="{Binding SelectedFloor}" Margin="10,5" SelectionChanged="FloorComboBox_SelectionChanged"/>
 
@@ -32,13 +33,21 @@
                                     <!-- Màu mặc định -->
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding TableStatus}" Value="Occupied">
+                                            <Setter Property="Background" Value="red"/>
+                                            <!-- Thay đổi màu khi bàn đã đặt thành công -->
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding TableStatus}" Value="Pending">
+                                            <Setter Property="Background" Value="Yellow"/>
+                                            <!-- Thay đổi màu khi bàn đã đặt thành công -->
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding TableStatus}" Value="Available">
                                             <Setter Property="Background" Value="Green"/>
                                             <!-- Thay đổi màu khi bàn đã đặt thành công -->
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </Border.Style>
-                            <StackPanel>
+                            <StackPanel >
                                 <TextBlock Text="{Binding TableName}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 <TextBlock Text="{Binding TableStatus}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </StackPanel>
@@ -53,8 +62,10 @@
             </ListBox>
 
 
-            <Button Content="Đặt bàn" Click="SetTableButton_Click" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,5" Height="38" Width="100"/>
-            <Button Content="Hủy đặt bàn" Click="CancelTableButton_Click" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,5" Height="38" Width="112"/>
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Right" Margin="10,5">
+                <Button Content="Đặt bàn" Click="SetTableButton_Click" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="0,0,0,5" Height="38"/>
+                <Button Content="Hủy đặt bàn" Click="CancelTableButton_Click" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="0,0,0,5" Height="38"/>
+            </StackPanel>
         </StackPanel>
 
 
