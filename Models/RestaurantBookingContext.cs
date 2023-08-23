@@ -33,8 +33,10 @@ namespace RestaurantBooking.Models
 
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(config.GetConnectionString("value"));
-                //config.GetValue<string>("ConnectionStrings:value");
+                var conf = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json").Build();
+                optionsBuilder.UseSqlServer(conf.GetConnectionString("MyCnn"));
             }
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
