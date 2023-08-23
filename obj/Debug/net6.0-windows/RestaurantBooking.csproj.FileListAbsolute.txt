@@ -399,3 +399,5 @@ C:\Users\Dorae\Desktop\PRN221-Team-3-Project\obj\Debug\net6.0-windows\refint\Res
 C:\Users\Dorae\Desktop\PRN221-Team-3-Project\obj\Debug\net6.0-windows\RestaurantBooking.pdb
 C:\Users\Dorae\Desktop\PRN221-Team-3-Project\obj\Debug\net6.0-windows\RestaurantBooking.genruntimeconfig.cache
 C:\Users\Dorae\Desktop\PRN221-Team-3-Project\obj\Debug\net6.0-windows\ref\RestaurantBooking.dll
+C:\Users\Dorae\Desktop\PRN221-Team-3-Project\obj\Debug\net6.0-windows\RegisterForm.g.cs
+C:\Users\Dorae\Desktop\PRN221-Team-3-Project\obj\Debug\net6.0-windows\RegisterForm.baml

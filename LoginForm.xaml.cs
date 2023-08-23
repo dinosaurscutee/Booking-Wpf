@@ -101,7 +101,8 @@ namespace RestaurantBooking
 
         private void registration_button_Click(object sender, RoutedEventArgs e)
         {
-
+            var resgisterForm = new RegisterForm();
+            resgisterForm.Show();
         }
     }
 }
