@@ -44,70 +44,83 @@ namespace RestaurantBooking
         //add food vào bảng order
         private void SelectFood_Click(object sender, RoutedEventArgs e)
         {
-            List<Models.MenuItem> selectedItems = menuItemsList.Where(item => item.IsSelected).ToList();
-
-            if (selectedItems.Count == 0)
+            if (viewModel.SelectedTable != null && viewModel.SelectedTable.TableStatus == "Pending")
             {
-                MessageBox.Show("Vui lòng chọn ít nhất một món ăn.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
+                List<Models.MenuItem> selectedItems = menuItemsList.Where(item => item.IsSelected).ToList();
 
-            bool hasZeroQuantity = selectedItems.Any(item => item.Quantity == 0);
-            if (hasZeroQuantity)
-            {
-                MessageBox.Show("Vui lòng nhập số lượng lớn hơn 0 cho các món ăn đã chọn.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            using (var transaction = _context.Database.BeginTransaction())
-            {
-                try
+                if (selectedItems.Count == 0)
                 {
-                    // Tạo bản ghi Order mới
-                    Order newOrder = new Order
+                    MessageBox.Show("Vui lòng chọn ít nhất một món ăn.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                bool hasZeroQuantity = selectedItems.Any(item => item.Quantity == 0);
+                if (hasZeroQuantity)
+                {
+                    MessageBox.Show("Vui lòng nhập số lượng lớn hơn 0 cho các món ăn đã chọn.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                using (var transaction = _context.Database.BeginTransaction())
+                {
+                    try
                     {
-                        OrderTime = DateTime.Now,
-                        Status = "Pending",
-                        PaymentStatus = "Unpaid",
-                        TotalAmount = selectedItems.Sum(item => item.ItemPrice * item.Quantity)
-                    };
-                    _context.Orders.Add(newOrder);
-                    _context.SaveChanges();
-
-                    // Lấy OrderId mới
-                    int newOrderId = newOrder.OrderId;
-
-                    // Thêm các món ăn đã chọn vào bảng OrderItem
-                    foreach (var selectedItem in selectedItems)
-                    {
-                        decimal itemPrice = selectedItem.ItemPrice ?? 0;
-                        int quantity = selectedItem.Quantity ?? 1;
-
-                        if (quantity > 0)
+                        // Tạo bản ghi Order mới
+                        Order newOrder = new Order
                         {
-                            OrderItem newOrderItem = new OrderItem
+                            OrderTime = DateTime.Now,
+                            Status = "Pending",
+                            PaymentStatus = "Unpaid",
+                            TotalAmount = selectedItems.Sum(item => item.ItemPrice * item.Quantity),
+                            TableId = viewModel.SelectedTable.TableId // Thêm TableId vào đơn hàng
+                        };
+                        _context.Orders.Add(newOrder);
+                        _context.SaveChanges();
+
+                        // Lấy OrderId mới
+                        int newOrderId = newOrder.OrderId;
+
+                        // Thêm các món ăn đã chọn vào bảng OrderItem
+                        foreach (var selectedItem in selectedItems)
+                        {
+                            decimal itemPrice = selectedItem.ItemPrice ?? 0;
+                            int quantity = selectedItem.Quantity ?? 1;
+
+                            if (quantity > 0)
                             {
-                                OrderId = newOrderId,
-                                MenuItemId = selectedItem.MenuItemId,
-                                ItemPrice = itemPrice,
-                                Quantity = quantity
-                            };
-                            _context.OrderItems.Add(newOrderItem);
+                                OrderItem newOrderItem = new OrderItem
+                                {
+                                    OrderId = newOrderId,
+                                    MenuItemId = selectedItem.MenuItemId,
+                                    ItemPrice = itemPrice,
+                                    Quantity = quantity
+                                };
+                                _context.OrderItems.Add(newOrderItem);
+                            }
                         }
+
+                        // Cập nhật trạng thái bàn thành "Occupied" sau khi đã đặt món
+                        viewModel.UpdateTableStatus(viewModel.SelectedTable, "Occupied");
+                        _context.SaveChanges();
+
+                        transaction.Commit();
+
+                        MessageBox.Show("Đã thêm các món vào đơn hàng và cập nhật trạng thái bàn.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
-
-                    _context.SaveChanges();
-                    transaction.Commit();
-
-                    MessageBox.Show("Đã thêm các món vào đơn hàng.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
-                catch (Exception ex)
-                {
-                    transaction.Rollback();
-                    MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+            }
+            else
+            {
+                MessageBox.Show("Bàn cần ở trạng thái 'Pending' để có thể đặt món ăn.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
+
+
 
         private void SetTableButton_Click(object sender, RoutedEventArgs e)
         {
@@ -119,7 +132,7 @@ namespace RestaurantBooking
 
                     if (inputCode == viewModel.SelectedTable.TableCode)
                     {
-                        viewModel.UpdateTableStatus(viewModel.SelectedTable, "Occupied");
+                        viewModel.UpdateTableStatus(viewModel.SelectedTable, "Pending");
                         MessageBox.Show("Bàn đã được đặt thành công.");
                         RefreshTableDataContext();
                     }
@@ -138,6 +151,7 @@ namespace RestaurantBooking
                 MessageBox.Show("Vui lòng chọn một bàn trước.");
             }
         }
+
 
         private void CancelTableButton_Click(object sender, RoutedEventArgs e)
         {

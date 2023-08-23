@@ -12,8 +12,14 @@
       }
     ],
     "additionalProbingPaths": [
+<<<<<<< HEAD
       "C:\\Users\\Dorae\\.dotnet\\store\\|arch|\\|tfm|",
       "C:\\Users\\Dorae\\.nuget\\packages"
+=======
+      "C:\\Users\\quang\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\quang\\.nuget\\packages",
+      "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+>>>>>>> e71f6c3fca6f9eb5e43d943e06e8febe2feac229
     ],
     "configProperties": {
       "System.Reflection.NullabilityInfoContext.IsSupported": true,

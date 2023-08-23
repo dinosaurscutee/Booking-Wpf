@@ -27,12 +27,16 @@ namespace RestaurantBooking.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
-                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-            IConfiguration configuration = builder.Build();
-            optionsBuilder.UseSqlServer(configuration.GetConnectionString("MyCnn"));
-        }
+            var config = new ConfigurationBuilder()
+                     .AddJsonFile("appsettings.json")
+                     .Build();
 
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer(config.GetConnectionString("value"));
+                //config.GetValue<string>("ConnectionStrings:value");
+            }
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MenuItem>(entity =>
