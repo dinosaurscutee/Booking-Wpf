@@ -101,6 +101,8 @@ namespace RestaurantBooking
 
                         // Cập nhật trạng thái bàn thành "Occupied" sau khi đã đặt món
                         viewModel.UpdateTableStatus(viewModel.SelectedTable, "Occupied");
+                        viewModel.RefreshTables();
+                        RefreshTableDataContext();
                         _context.SaveChanges();
 
                         transaction.Commit();
@@ -159,8 +161,16 @@ namespace RestaurantBooking
             {
                 if (viewModel.SelectedTable.TableStatus == "Occupied")
                 {
+                    int selectedTableId = viewModel.SelectedTable.TableId;
+                    viewModel.RemoveOrdersByTableId(selectedTableId);
                     viewModel.UpdateTableStatus(viewModel.SelectedTable, "Available");
                     MessageBox.Show("Hủy đặt bàn thành công.");
+                    RefreshTableDataContext();
+                }
+                else if (viewModel.SelectedTable.TableStatus == "Pending")
+                {
+                    viewModel.UpdateTableStatus(viewModel.SelectedTable, "Available");
+                    MessageBox.Show("Bàn ở trạng thái 'Pending' đã được hủy.");
                     RefreshTableDataContext();
                 }
                 else
@@ -173,6 +183,7 @@ namespace RestaurantBooking
                 MessageBox.Show("Vui lòng chọn một bàn trước.");
             }
         }
+
         private string PromptForInput(string prompt)
         {
             InputDialog inputDialog = new InputDialog(prompt);

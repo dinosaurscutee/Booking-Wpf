@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TableManage"
         mc:Ignorable="d"
-        Title="InputDialog" Height="450" Width="800">
+        Title="InputDialog" Height="300" Width="300" >
     <Grid>
         <StackPanel Margin="10">
             <TextBlock Text="{Binding Prompt}" Margin="0 0 0 10"/>
-            <TextBox Name="InputTextBox"/>
+            <TextBox Name="InputTextBox" KeyDown="InputTextBox_KeyDown"/>
             <Button Content="OK" Name="OKButton" Margin="0 10 0 0" HorizontalAlignment="Right" Click="OKButton_Click"/>
         </StackPanel>
     </Grid>

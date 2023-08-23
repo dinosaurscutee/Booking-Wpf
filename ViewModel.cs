@@ -1,10 +1,12 @@
-﻿using RestaurantBooking.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using RestaurantBooking.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Data;
 
 namespace TableManage
@@ -99,7 +101,28 @@ namespace TableManage
             }
         }
 
-       
+
+
+        public void RemoveOrdersByTableId(int tableId)
+        {
+            // Lấy tất cả các Order có TableId tương ứng
+            List<Order> ordersToRemove = dbContext.Orders.Where(order => order.TableId == tableId).ToList();
+
+            // Xóa tất cả các OrderItem có liên quan đến các Order tương ứng
+            foreach (var order in ordersToRemove)
+            {
+                var orderItemsToRemove = dbContext.OrderItems.Where(item => item.OrderId == order.OrderId).ToList();
+                dbContext.OrderItems.RemoveRange(orderItemsToRemove);
+            }
+
+            // Xóa tất cả các Order có liên quan đến TableId tương ứng
+            dbContext.Orders.RemoveRange(ordersToRemove);
+
+            // Lưu thay đổi vào cơ sở dữ liệu
+            dbContext.SaveChanges();
+        }
+
+
 
     }
 }
