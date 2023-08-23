@@ -104,6 +104,9 @@
                 </ListView.View>
             </ListView>
             <Button Content="Chọn món" Width="100" HorizontalAlignment="Center" Click="SelectFood_Click" />
+            <Button x:Name="btnCheckout" Width="100" Content="Checkout" Grid.Row="8" HorizontalAlignment="Center" Margin="10" Click="Checkout_Click"/>
+            <Button x:Name="btnDone" Content="Done" Width="100" Click="Done_Click" Visibility="Collapsed"/>
+            <Image x:Name="imgQRCode" Grid.Row="9" HorizontalAlignment="Center" Margin="10"/>
         </StackPanel>
     </Grid>
 </Window>

@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Interop;
+using System.Windows.Media.Imaging;
 using Microsoft.EntityFrameworkCore;
+using QRCoder;
 using RestaurantBooking.Models;
 using TableManage;
 
@@ -122,7 +126,94 @@ namespace RestaurantBooking
             }
         }
 
+        private void Checkout_Click(object sender, RoutedEventArgs e)
+        {
+            if (viewModel.SelectedTable != null && viewModel.SelectedTable.TableStatus == "Occupied")
+            {
+                int orderId = GetOrderIdForTable(viewModel.SelectedTable.TableId);
 
+                string qrText = GenerateQRTextForOrder(orderId);
+                Bitmap qrCodeImage = GenerateQRCodeImage(qrText);
+
+                imgQRCode.Source = Imaging.CreateBitmapSourceFromHBitmap(
+            qrCodeImage.GetHbitmap(),
+            IntPtr.Zero,
+            Int32Rect.Empty,
+            BitmapSizeOptions.FromEmptyOptions());
+                btnDone.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                MessageBox.Show("Bàn cần ở trạng thái 'Occupied' để có thể thanh toán.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        private int GetOrderIdForTable(int tableId)
+        {
+            Order order = _context.Orders.Where(o => o.TableId == tableId && o.Status == "Pending").OrderByDescending(o => o.OrderId).ToList().ElementAt(0);
+            return order?.OrderId ?? -1;
+        }
+
+        private string GenerateQRTextForOrder(int orderId)
+        {
+            // Lấy thông tin đơn hàng từ cơ sở dữ liệu dựa trên orderId
+            Order order = _context.Orders.Include("OrderItems").FirstOrDefault(o => o.OrderId == orderId);
+
+            if (order != null)
+            {
+                // Tạo chuỗi QR code từ thông tin đơn hàng
+                string qrText = $"Order ID: {order.OrderId}\n";
+                qrText += $"Table: {order.Table.TableName}\n";
+                qrText += $"Order Time: {order.OrderTime}\n";
+                qrText += "Items:\n";
+
+                foreach (var orderItem in order.OrderItems)
+                {
+                    qrText += $"{orderItem.Quantity} x {orderItem.MenuItem.ItemName}\n";
+                }
+
+                qrText += $"Total Amount: {order.TotalAmount} VND";
+
+                return qrText;
+            }
+
+            return string.Empty;
+        }
+
+        private Bitmap GenerateQRCodeImage(string data)
+        {
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(data, QRCodeGenerator.ECCLevel.Q);
+            QRCode qrCode = new QRCode(qrCodeData);
+            Bitmap qrCodeImage = qrCode.GetGraphic(10);
+            return qrCodeImage;
+        }
+
+        private void Done_Click(object sender, RoutedEventArgs e)
+        {
+            int orderId = GetOrderIdForTable(viewModel.SelectedTable.TableId);
+            Order order = _context.Orders.FirstOrDefault(o => o.OrderId == orderId);
+            if (order != null)
+            {
+                order.Status = "Completed";
+                order.PaymentStatus = "Paid";
+                Payment payment = new Payment
+                {
+                    OrderId = orderId,
+                    PaymentAmount = order.TotalAmount,
+                    PaymentDate = DateTime.Now,
+                    PaymentStatus = "Paid"
+                };
+                _context.Payments.Add(payment);
+            }
+            viewModel.UpdateTableStatus(viewModel.SelectedTable, "Available");
+            _context.SaveChanges();
+            MessageBox.Show("Thanh toán thành công!", "Thông báo", MessageBoxButton.OK);
+            btnDone.Visibility = Visibility.Collapsed;
+            imgQRCode.Visibility = Visibility.Collapsed;
+            LoadMenuItems();
+            RefreshTableDataContext();
+        }
 
         private void SetTableButton_Click(object sender, RoutedEventArgs e)
         {
