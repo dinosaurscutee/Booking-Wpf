@@ -13,12 +13,12 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" MinHeight="191" />
+            <RowDefinition Height="Auto" MinHeight="25.4" />
+            <RowDefinition />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Column="0" Grid.Row="0">
+        <StackPanel Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
             <Label Content="Chọn Bàn" FontSize="20" HorizontalAlignment="Center" Margin="0,20,0,10" />
             <ComboBox Name="TableTypeComboBox" ItemsSource="{Binding TableTypes}" SelectedItem="{Binding SelectedTableType}" Margin="10" SelectionChanged="TableTypeComboBox_SelectionChanged"/>
             <ComboBox Name="FloorComboBox" ItemsSource="{Binding Floors}" SelectedItem="{Binding SelectedFloor}" Margin="10,5" SelectionChanged="FloorComboBox_SelectionChanged"/>
@@ -72,13 +72,13 @@
 
 
 
-        <StackPanel Grid.Column="1" Grid.Row="0">
+        <StackPanel Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
             <Label Content="Restaurant Booking" HorizontalAlignment="Center" FontSize="30" FontWeight="Bold"/>
         </StackPanel>
 
-     
+
         <StackPanel Grid.Column="2" Grid.Row="0" Grid.RowSpan="3">
-            
+
             <Label Content="Chọn món ăn" FontSize="20" HorizontalAlignment="Center" Margin="0,0,0,10" />
             <ListView Name="foodListView" Height="150" Width="330">
                 <ListView.View>
@@ -109,6 +109,23 @@
             </StackPanel>
             <Button x:Name="btnDone" Content="Done" Width="100" Click="Done_Click" Visibility="Collapsed"/>
             <Image x:Name="imgQRCode" Grid.Row="9" HorizontalAlignment="Center" Margin="10"/>
+        </StackPanel>
+        <StackPanel Height="400" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Name="table" Visibility="Collapsed">
+            <TextBlock Text="Thông tin đơn hàng:" FontWeight="Bold" />
+            <TextBox x:Name="txtOrderId"/>
+            <TextBox x:Name="txtTableName"/>
+            <TextBox x:Name="txtOrderTime"/>
+            <ListView Name="items" Height="200" Width="200" Margin="0, 0 , 190, 0" ItemsSource="{Binding Order.OrderItems}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Tên món ăn" DisplayMemberBinding="{Binding MenuItem.ItemName}" />
+                        <GridViewColumn Header="Số lượng" DisplayMemberBinding="{Binding Quantity}" />
+                    </GridView>
+                    
+                </ListView.View>
+            </ListView>
+            <TextBox x:Name="txtTotal"/>
+          
         </StackPanel>
     </Grid>
 </Window>
