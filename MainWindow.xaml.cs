@@ -140,6 +140,16 @@ namespace RestaurantBooking
             IntPtr.Zero,
             Int32Rect.Empty,
             BitmapSizeOptions.FromEmptyOptions());
+                imgQRCode.Visibility = Visibility.Visible;
+                //Hiển thị thông tin đơn hàng
+                Order order = GetOrderDetails(orderId);
+                txtOrderId.Text ="OrderID: " + order.OrderId.ToString();
+                txtTableName.Text = "Tên bàn: " + order.Table.TableName.ToString();
+                txtOrderTime.Text = "Thời gian: " +order.OrderTime.ToString();
+                items.ItemsSource = order.OrderItems;
+                txtTotal.Text = "Tổng tiền: "+order.TotalAmount.ToString();
+
+                table.Visibility = Visibility.Visible;
                 btnDone.Visibility = Visibility.Visible;
             }
             else
@@ -147,7 +157,12 @@ namespace RestaurantBooking
                 MessageBox.Show("Bàn cần ở trạng thái 'Occupied' để có thể thanh toán.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
-
+        private Order GetOrderDetails(int orderId)
+        {
+            // Lấy thông tin đơn hàng từ cơ sở dữ liệu dựa trên orderId
+            Order order = _context.Orders.Include("OrderItems").FirstOrDefault(o => o.OrderId == orderId);
+            return order;
+        }
         private int GetOrderIdForTable(int tableId)
         {
             Order order = _context.Orders.Where(o => o.TableId == tableId && o.Status == "Pending").OrderByDescending(o => o.OrderId).ToList().ElementAt(0);
@@ -211,6 +226,7 @@ namespace RestaurantBooking
             MessageBox.Show("Thanh toán thành công!", "Thông báo", MessageBoxButton.OK);
             btnDone.Visibility = Visibility.Collapsed;
             imgQRCode.Visibility = Visibility.Collapsed;
+            table.Visibility = Visibility.Collapsed;
             LoadMenuItems();
             RefreshTableDataContext();
         }
