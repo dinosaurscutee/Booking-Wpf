@@ -303,5 +303,10 @@ namespace RestaurantBooking
             RefreshTableDataContext();
         }
 
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            var LoginForm= new LoginForm();
+            LoginForm.Show();
+        }
     }
 }
