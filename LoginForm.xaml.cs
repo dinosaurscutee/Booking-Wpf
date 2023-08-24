@@ -63,10 +63,8 @@ namespace RestaurantBooking
                         acc = listAccounts.FirstOrDefault(e => username.Equals(e.UserName) && e.UserRole.Equals("Admin"));
                         if (acc != null)
                         {
-                            this.Hide();
-                            var mainWindow = new MainWindow();
-                            mainWindow.Closed += (s, args) => this.Close();
-                            mainWindow.Show();
+                            MessageBox.Show("Login successfully");
+                            this.Close();
                         }
                         else
                         {

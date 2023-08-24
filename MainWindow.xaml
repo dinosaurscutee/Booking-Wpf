@@ -67,16 +67,9 @@
                 <Button Content="Hủy đặt bàn" Click="CancelTableButton_Click" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="5" Width="100"/>
             </StackPanel>
         </StackPanel>
-
-
-
-
-
         <StackPanel Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
             <Label Content="Restaurant Booking" HorizontalAlignment="Center" FontSize="30" FontWeight="Bold"/>
         </StackPanel>
-
-
         <StackPanel Grid.Column="2" Grid.Row="0" Grid.RowSpan="3">
 
             <Label Content="Chọn món ăn" FontSize="20" HorizontalAlignment="Center" Margin="0,0,0,10" />
@@ -120,12 +113,11 @@
                     <GridView>
                         <GridViewColumn Header="Tên món ăn" DisplayMemberBinding="{Binding MenuItem.ItemName}" />
                         <GridViewColumn Header="Số lượng" DisplayMemberBinding="{Binding Quantity}" />
-                    </GridView>
-                    
+                    </GridView>                    
                 </ListView.View>
             </ListView>
             <TextBox x:Name="txtTotal"/>
-          
+           <Button Content="Login" Height="44" Width="228" Margin="86,300,86,256" Click="LoginButton_Click" Grid.Row="3"/>
         </StackPanel>
     </Grid>
 </Window>

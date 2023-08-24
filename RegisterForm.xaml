@@ -82,7 +82,7 @@
                   BorderThickness="0,0,0,1"/>
                 </Grid>
                 <Button x:Name="registerBtn" 
-                    Content="Register" 
+                    Content="Sign Up" 
                     Foreground="White"
                     Background="Black"
                     Margin="20"
