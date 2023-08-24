@@ -117,7 +117,7 @@
                 </ListView.View>
             </ListView>
             <TextBox x:Name="txtTotal"/>
-           <Button Content="Login" Height="44" Width="228" Margin="86,300,86,256" Click="LoginButton_Click" Grid.Row="3"/>
         </StackPanel>
+        <Button Content="Login" Height="44" Width="228" Margin="86,300,86,256" Click="LoginButton_Click"/>
     </Grid>
 </Window>
